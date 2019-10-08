@@ -42,7 +42,8 @@ fn process_request(req: Request<Body>, jwt_secret: String) -> Result<Response<Bo
 	let mut email = "";
 	let mut name = "";
 	for pair in dn.split(',') {
-		let (key, val) = pair.split_at(pair.find('=')?);
+		let (key, _) = pair.split_at(pair.find('=')?);
+		let (_, val) = pair.split_at(pair.find('=')? + 1);
 		if key == "emailAddress" { email = val; }
 		if key == "CN" { name = val; }
 	}
