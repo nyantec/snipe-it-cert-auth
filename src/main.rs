@@ -43,10 +43,10 @@ fn process_request(req: Request<Body>, jwt_secret: String) -> Result<Response<Bo
 	for pair in dn.split(',') {
 		let (key, val) = pair.split_at(pair.find('=')?);
 		if key == "emailAddress" { email = val; }
-		if key == "name" { name = val; }
+		if key == "CN" { name = val; }
 	}
 	if email == "" { Err(CustomError::MissingField{name: "emailAddress".to_string()})? }
-	if name == "" { Err(CustomError::MissingField{name: "name".to_string()})? }
+	if name == "" { Err(CustomError::MissingField{name: "CN".to_string()})? }
 
 	let exp = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs() + 3600;
 	let my_claims = Claims{ email: email.to_string(), name: name.to_string(), exp: exp };
