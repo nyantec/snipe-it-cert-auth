@@ -33,6 +33,7 @@ struct Claims {
 	email: String,
 	name: String,
 	exp: u64,
+	iat: u64,
 }
 
 
@@ -48,8 +49,9 @@ fn process_request(req: Request<Body>, jwt_secret: String) -> Result<Response<Bo
 	if email == "" { Err(CustomError::MissingField{name: "emailAddress".to_string()})? }
 	if name == "" { Err(CustomError::MissingField{name: "CN".to_string()})? }
 
-	let exp = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs() + 3600;
-	let my_claims = Claims{ email: email.to_string(), name: name.to_string(), exp: exp };
+	let iat = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
+	let exp = iat + 3600;
+	let my_claims = Claims{ email: email.to_string(), name: name.to_string(), exp: exp, iat: iat };
 	let token = encode(&Header::default(), &my_claims, Key::Hmac(jwt_secret.as_str().as_ref()))?;
 
 	Ok(Response::builder()
