@@ -39,7 +39,7 @@ fn process_request(req: Request<Body>) -> Result<Response<Body>> {
 		let (_, val) = pair.split_at(pair.find('=').ok_or(CustomError::ParseError)? + 1);
 		if key == "emailAddress" { email = val; }
 		if key == "CN" { name = val; }
-		if key == "UUID" { uid = val; }
+		if key == "UID" { uid = val; }
 	}
 	if email == "" { Err(CustomError::MissingField{name: "emailAddress".to_string()})? }
 	if name == "" { Err(CustomError::MissingField{name: "CN".to_string()})? }
