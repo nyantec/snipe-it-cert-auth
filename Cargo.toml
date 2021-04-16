@@ -1,8 +1,9 @@
 [package]
 name = "cert-auth"
 version = "0.2.0"
-authors = ["Milan Pässler <me@pbb.lc>"]
+authors = ["The cert-auth Authors <oss@nyantec.com>"]
 edition = "2018"
+license = "MirOS"
 
 [dependencies]
 jsonwebtoken = "7.2"
