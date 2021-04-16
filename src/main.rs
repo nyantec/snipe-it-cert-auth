@@ -1,6 +1,6 @@
 use std::time::{SystemTime, UNIX_EPOCH};
 use serde_derive::{Serialize};
-use jsonwebtoken::{encode, Header, Key};
+use jsonwebtoken::{encode, Header, EncodingKey};
 use hyper::{Body, Request, Response, Server, StatusCode};
 use hyper::header;
 use hyper::service::{make_service_fn, service_fn};
@@ -51,7 +51,7 @@ fn process_request(req: Request<Body>) -> Result<Response<Body>> {
 	let exp = iat + 3600;
 	let my_claims = Claims{ email: email.to_string(), name: name.to_string(), uid: uid.to_string(), exp: exp, iat: iat };
 	let jwt_secret = env::var("JWT_SECRET").unwrap().to_string();
-	let token = encode(&Header::default(), &my_claims, Key::Hmac(jwt_secret.as_str().as_ref()))?;
+	let token = encode(&Header::default(), &my_claims, &EncodingKey::from_secret(jwt_secret.as_str().as_ref()))?;
 
 	Ok(Response::builder()
 		.status(StatusCode::TEMPORARY_REDIRECT)
